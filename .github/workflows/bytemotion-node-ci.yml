@@ -3,8 +3,6 @@ name: ByteMotion AB NodeJS CI - Build, Test, and Publish
 on:
   workflow_call:
     secrets:
-      ACCESS_TOKEN:
-        required: true
       GIT_USER_EMAIL:
         required: true
       GIT_USER_NAME:
@@ -23,9 +21,6 @@ jobs:
     steps:
     - name: 'Checkout repository and submodules'
       uses: actions/checkout@v2
-      with:
-        submodules: true
-        token: ${{ secrets.ACCESS_TOKEN }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
