@@ -48,6 +48,9 @@ jobs:
           git config --global user.name "${{secrets.GIT_USER_NAME}}"
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
           [[ $BRANCH = 'master' ]] && RELEASE="patch" || RELEASE="prerelease --preid=rc"
+          npm install
+          npm run build
+          git checkout -- .
           npm version $RELEASE
           echo "Pushing to $BRANCH"
           git push origin $BRANCH
