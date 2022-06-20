@@ -44,6 +44,11 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
 
+      - name: Set Major Release
+        id: major_release
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        run: echo "::set-output name=RELEASE::major"
+
       - name: Set Minor Release
         id: minor_release
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
@@ -58,6 +63,7 @@ jobs:
         run: | 
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
           RELEASE=${{ 
+            steps.major_release.outputs.RELEASE ||
             steps.minor_release.outputs.RELEASE ||
             steps.prerelease_release.outputs.RELEASE ||
             'patch'
