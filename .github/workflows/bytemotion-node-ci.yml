@@ -43,16 +43,38 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: | 
-          git config --global user.email "${{secrets.GIT_USER_EMAIL}}"
-          git config --global user.name "${{secrets.GIT_USER_NAME}}"
+
+      - name: Set Major Release
+        id: major_release
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        run: echo "::set-output name=RELEASE::major"
+
+      - name: Set Minor Release
+        id: minor_release
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
+        run: echo "::set-output name=RELEASE::minor"
+
+      - name: Set PreRelease Release
+        id: prerelease_release
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
+        run: echo "::set-output name=RELEASE::prerelease --preid=rc"
+
+      - name: Tag and Publish
+        run: | 
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          [[ $BRANCH = 'master' ]] && RELEASE="patch" || RELEASE="prerelease --preid=rc"
+          RELEASE=${{ 
+            steps.major_release.outputs.RELEASE ||
+            steps.minor_release.outputs.RELEASE ||
+            steps.prerelease_release.outputs.RELEASE ||
+            'patch'
+          }}
+          git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+          git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
           git checkout -- .
           npm version $RELEASE
-          echo "Pushing to $BRANCH"
+          echo "Pushing $RELEASE to $BRANCH"
           git push origin $BRANCH
           git push origin $BRANCH --tags
           npm publish
