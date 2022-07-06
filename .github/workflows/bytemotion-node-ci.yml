@@ -47,17 +47,24 @@ jobs:
       - name: Set Major Release
         id: major_release
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
-        run: echo "::set-output name=RELEASE::major"
+        run: |
+          echo "::set-output name=RELEASE::major"
+          echo "::set-output name=TAG::latest"
 
       - name: Set Minor Release
         id: minor_release
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
-        run: echo "::set-output name=RELEASE::minor"
+        run: |
+          echo "::set-output name=RELEASE::minor"
+          echo "::set-output name=TAG::latest"
 
       - name: Set PreRelease Release
         id: prerelease_release
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
-        run: echo "::set-output name=RELEASE::prerelease --preid=rc"
+        run: |
+          echo "::set-output name=RELEASE::prerelease --preid=rc"
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "::set-output name=TAG::${BRANCH}"
 
       - name: Tag and Publish
         run: | 
@@ -77,6 +84,6 @@ jobs:
           echo "Pushing $RELEASE to $BRANCH"
           git push origin $BRANCH
           git push origin $BRANCH --tags
-          npm publish
+          npm publish --tag ${{ steps.prerelease_release.outputs.TAG }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
