@@ -87,3 +87,15 @@ jobs:
           npm publish --tag ${{ steps.prerelease_release.outputs.TAG }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    
+      - name: node-red-docker Repository Dispatch
+        if: ${{ steps.prerelease_release.outputs.TAG == 'latest' }}
+        run: |
+          JSON_PAYLOAD="{ \"event_type\": \"publish\" }"
+          API_URL="https://api.github.com/repos/byte-motion/node-red-docker/dispatches"
+          curl \
+          --trace-ascii - \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+          ${API_URL} \
+          -d "${JSON_PAYLOAD}"
