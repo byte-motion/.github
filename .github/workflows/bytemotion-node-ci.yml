@@ -14,13 +14,15 @@ on:
 
 jobs:
   test:
-    if: ${{ github.actor }} != ${{ secrets.GIT_USER_NAME }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      ACTOR: ${{ secrets.GIT_USER_NAME }}
+    if: ${{ github.actor != env.ACTOR }}
     steps:
     - name: 'Checkout repository and submodules'
       uses: actions/checkout@v2
