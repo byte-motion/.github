@@ -22,7 +22,7 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     env:
       ACTOR: ${{ secrets.GIT_USER_NAME }}
-    if: ${{ github.actor != env.ACTOR }}
+    if: "${{ github.actor != env.ACTOR }}"
     steps:
     - name: 'Checkout repository and submodules'
       uses: actions/checkout@v2
