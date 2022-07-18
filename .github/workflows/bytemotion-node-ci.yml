@@ -90,7 +90,10 @@ jobs:
           npm run build
           git checkout -- .
           npm version $RELEASE
-          echo "Pushing $RELEASE to $BRANCH with tag $TAG"
+          REPO=${{ github.event.repository.name }}
+          echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
+          ORIGIN="https://${{ secrets.GIT_USER_NAME }}:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/byte-motion/${REPO}.git"
+          git remote set-url origin $ORIGIN
           git push origin $BRANCH
           git push origin $BRANCH --tags
           npm publish --tag $TAG
