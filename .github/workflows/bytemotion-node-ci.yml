@@ -46,6 +46,9 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
 
+      - name: Debug
+        run: echo ${{ github.event_name }}
+
       - name: Set Major Release
         id: major_release
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
@@ -77,16 +80,17 @@ jobs:
             steps.prerelease_release.outputs.RELEASE ||
             'patch'
           }}
+          TAG=${{ steps.prerelease_release.outputs.TAG }}
           git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
           git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
           git checkout -- .
           npm version $RELEASE
-          echo "Pushing $RELEASE to $BRANCH"
+          echo "Pushing $RELEASE to $BRANCH with tag $TAG"
           git push origin $BRANCH
           git push origin $BRANCH --tags
-          npm publish --tag ${{ steps.prerelease_release.outputs.TAG }}
+          npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
     
