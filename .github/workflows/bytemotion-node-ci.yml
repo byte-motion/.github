@@ -86,13 +86,15 @@ jobs:
           }}
           TAG=${{ steps.prerelease_release.outputs.TAG || 'latest' }}
           echo "::set-output name=TAG::${TAG}"
+          git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+          git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
           git checkout -- .
           npm version $RELEASE
           REPO=${{ github.event.repository.name }}
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
-          ORIGIN="https://${{ secrets.GIT_USER_NAME }}:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/byte-motion/${REPO}.git"
+          ORIGIN=https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git remote set-url origin $ORIGIN
           git push origin $BRANCH
           git push origin $BRANCH --tags
