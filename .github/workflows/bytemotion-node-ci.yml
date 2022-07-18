@@ -9,6 +9,8 @@ on:
         required: true
       NPM_TOKEN:
         required: true
+      PERSONAL_ACCESS_TOKEN:
+        required: true
 
 jobs:
   test:
@@ -44,20 +46,30 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
 
+      - name: Debug
+        run: echo ${{ github.event_name }}
+
       - name: Set Major Release
         id: major_release
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
-        run: echo "::set-output name=RELEASE::major"
+        run: |
+          echo "::set-output name=RELEASE::major"
+          echo "::set-output name=TAG::latest"
 
       - name: Set Minor Release
         id: minor_release
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
-        run: echo "::set-output name=RELEASE::minor"
+        run: |
+          echo "::set-output name=RELEASE::minor"
+          echo "::set-output name=TAG::latest"
 
       - name: Set PreRelease Release
         id: prerelease_release
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
-        run: echo "::set-output name=RELEASE::prerelease --preid=rc"
+        run: |
+          echo "::set-output name=RELEASE::prerelease --preid=rc"
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "::set-output name=TAG::${BRANCH}"
 
       - name: Tag and Publish
         run: | 
@@ -68,15 +80,28 @@ jobs:
             steps.prerelease_release.outputs.RELEASE ||
             'patch'
           }}
+          TAG=${{ steps.prerelease_release.outputs.TAG }}
           git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
           git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
           git checkout -- .
           npm version $RELEASE
-          echo "Pushing $RELEASE to $BRANCH"
+          echo "Pushing $RELEASE to $BRANCH with tag $TAG"
           git push origin $BRANCH
           git push origin $BRANCH --tags
-          npm publish
+          npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    
+      - name: node-red-docker Repository Dispatch
+        if: ${{ steps.prerelease_release.outputs.TAG == 'latest' }}
+        run: |
+          JSON_PAYLOAD="{ \"event_type\": \"publish\" }"
+          API_URL="https://api.github.com/repos/byte-motion/node-red-docker/dispatches"
+          curl \
+          --trace-ascii - \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+          ${API_URL} \
+          -d "${JSON_PAYLOAD}"
