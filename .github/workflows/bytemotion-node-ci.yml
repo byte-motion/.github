@@ -14,18 +14,13 @@ on:
 
 jobs:
   test:
+    if: github.actor != secrets.GIT_USER_NAME 
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    env:
-      ACTOR: ${{ secrets.GIT_USER_NAME }}
-    if: ${{ github.actor }} != env.ACTOR
+        node-version: [14.x, 16.x]
     steps:
-    - name: Github Actor
-      run: echo ${{ github.actor }}
     - name: 'Checkout repository and submodules'
       uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -45,7 +40,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
