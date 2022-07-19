@@ -24,8 +24,8 @@ jobs:
       ACTOR: ${{ secrets.GIT_USER_NAME }}
     if: ${{ github.actor }} != env.ACTOR
     steps:
-    - name: Debug
-      run: echo ${{ github }}
+    - name: Github Actor
+      run: echo ${{ github.actor }}
     - name: 'Checkout repository and submodules'
       uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -54,7 +54,7 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
 
-      - name: Debug
+      - name: Github Event
         run: echo ${{ github.event_name }}
 
       - name: Set Major Release
@@ -100,10 +100,10 @@ jobs:
           REPO=${{ github.event.repository.name }}
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
           ORIGIN=https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
-        # git remote set-url origin $ORIGIN
-        # git push origin $BRANCH
-        # git push origin $BRANCH --tags
-        # npm publish --tag $TAG
+          git remote set-url origin $ORIGIN
+          git push origin $BRANCH
+          git push origin $BRANCH --tags
+          npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
     
