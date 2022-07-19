@@ -24,6 +24,8 @@ jobs:
       ACTOR: ${{ secrets.GIT_USER_NAME }}
     if: ${{ github.actor }} != env.ACTOR
     steps:
+    - name: Debug
+      run: echo ${{ github.actor }}
     - name: 'Checkout repository and submodules'
       uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
