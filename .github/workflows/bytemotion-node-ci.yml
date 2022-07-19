@@ -100,10 +100,10 @@ jobs:
           REPO=${{ github.event.repository.name }}
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
           ORIGIN=https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git remote set-url origin $ORIGIN
-          git push origin $BRANCH
-          git push origin $BRANCH --tags
-          npm publish --tag $TAG
+        # git remote set-url origin $ORIGIN
+        # git push origin $BRANCH
+        # git push origin $BRANCH --tags
+        # npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
     
