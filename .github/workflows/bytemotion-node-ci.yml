@@ -84,6 +84,12 @@ jobs:
             steps.prerelease_release.outputs.RELEASE ||
             'patch'
           }}
+          if [ $RELEASE = "patch" -a $BRANCH != "master" ]; 
+          then 
+            exit 0
+          fi
+          echo "::set-output name=BRANCH::${BRANCH}"
+          echo "::set-output name=RELEASE::${RELEASE}"
           TAG=${{ steps.prerelease_release.outputs.TAG || 'latest' }}
           echo "::set-output name=TAG::${TAG}"
           git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
@@ -96,8 +102,8 @@ jobs:
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
           ORIGIN=https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git remote set-url origin $ORIGIN
-          git push origin $BRANCH
           git push origin $BRANCH --tags
+          git push origin $BRANCH
           npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
