@@ -105,6 +105,7 @@ jobs:
           if [ ${CHECKIN_BUILD} = true ]; 
           then 
             git add .
+            git status
             git commit -am 'CI build'
           else 
             git checkout -- .
