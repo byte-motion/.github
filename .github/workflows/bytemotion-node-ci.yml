@@ -96,7 +96,12 @@ jobs:
           git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
-          git checkout -- .
+          if [ ${CHECKIN_BUILD} = true ]; 
+          then 
+            git commit -am 'CI build'
+          else 
+            git checkout -- .
+          fi
           npm version $RELEASE
           REPO=${{ github.event.repository.name }}
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
