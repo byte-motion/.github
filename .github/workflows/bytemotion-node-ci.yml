@@ -55,7 +55,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Github Event
-        run: echo ${{ github.event_name }}
+        run: echo ${{ toJSON(github.event) }}
 
       - name: Set Major Release
         id: major_release
@@ -66,7 +66,7 @@ jobs:
 
       - name: Set Minor Release
         id: minor_release
-        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
+        if: ${{ github.event_name == 'push' && github.event.pull_request.merged == true }}
         run: |
           echo "::set-output name=RELEASE::minor"
           echo "::set-output name=TAG::latest"
