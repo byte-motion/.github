@@ -2,6 +2,11 @@ name: ByteMotion AB NodeJS CI - Build, Test, and Publish
 
 on:
   workflow_call:
+    inputs:
+      check-in-build-result:
+        description: 'True to check in result of running "npm run build"'
+        required: false
+        type: boolean
     secrets:
       GIT_USER_EMAIL:
         required: true
@@ -96,6 +101,7 @@ jobs:
           git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
+          CHECKIN_BUILD=${{ check-in-build-result || false }}
           if [ ${CHECKIN_BUILD} = true ]; 
           then 
             git commit -am 'CI build'
