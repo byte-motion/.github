@@ -104,6 +104,7 @@ jobs:
           CHECKIN_BUILD=${{ inputs.check-in-build-result || false }}
           if [ ${CHECKIN_BUILD} = true ]; 
           then 
+            git add .
             git commit -am 'CI build'
           else 
             git checkout -- .
