@@ -106,14 +106,15 @@ jobs:
           npm run build
           git status
           CHECKIN_BUILD=${{ inputs.check-in-build-result || false }}
-          if [ ${CHECKIN_BUILD} = true ]; 
+          FILES_TO_COMMIT=$(git status --porcelain)
+          if [[ -z ${FILES_TO_COMMIT} || ${CHECKIN_BUILD} = false ]];
           then
+            echo "Not checking in build result"
+            git checkout -- .
+          else 
             echo "Checking in build result"
             git add .
             git commit -am 'CI build'
-          else 
-            echo "Not checking in build result"
-            git checkout -- .
           fi
           npm version $RELEASE
           REPO=${{ github.event.repository.name }}
