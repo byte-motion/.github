@@ -101,13 +101,15 @@ jobs:
           git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
+          git status
           CHECKIN_BUILD=${{ inputs.check-in-build-result || false }}
           if [ ${CHECKIN_BUILD} = true ]; 
-          then 
+          then
+            echo "Checking in build result"
             git add .
-            git status
             git commit -am 'CI build'
           else 
+            echo "Not checking in build result"
             git checkout -- .
           fi
           npm version $RELEASE
