@@ -101,7 +101,7 @@ jobs:
           git config --global user.name "${{ secrets.GIT_USER_NAME }}"
           npm install
           npm run build
-          CHECKIN_BUILD=${{ check-in-build-result || false }}
+          CHECKIN_BUILD=${{ inputs.check-in-build-result || false }}
           if [ ${CHECKIN_BUILD} = true ]; 
           then 
             git commit -am 'CI build'
