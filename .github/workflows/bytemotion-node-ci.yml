@@ -79,7 +79,7 @@ jobs:
         id: prerelease_release
         if: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.merged == false }}
         run: |
-          echo "RELEASE=prerelease --preid=rc" >> $GITHUB_OUTPUT 
+          echo "RELEASE=\"prerelease --preid=rc\"" >> $GITHUB_OUTPUT 
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
           echo "TAG=${BRANCH}" >> $GITHUB_OUTPUT 
 
@@ -117,7 +117,7 @@ jobs:
             git add .
             git commit -am 'CI build'
           fi
-          npm version $RELEASE
+          npm version "$RELEASE"
           REPO=${{ github.event.repository.name }}
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
           ORIGIN=https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
