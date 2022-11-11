@@ -59,7 +59,7 @@ jobs:
         run: |
           echo ${{ github.event_name }}
           echo ${{ github.event.action }}
-          echo ${{ github.event }} | jq .
+          echo "$GITHUB_CONTEXT"
 
       - name: Set Major Release
         id: major_release
@@ -76,7 +76,7 @@ jobs:
           echo "TAG=latest" >> $GITHUB_OUTPUT 
 
       - name: Set PreRelease Release
-        id: prerelease_release
+        id: pull_request_target
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
         run: |
           echo "RELEASE=prerelease --preid=rc" >> $GITHUB_OUTPUT 
