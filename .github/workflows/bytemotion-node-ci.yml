@@ -70,14 +70,14 @@ jobs:
 
       - name: Set Minor Release
         id: minor_release
-        if: ${{ github.event_name == 'push' && github.event.pull_request.merged == true }}
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
         run: |
           echo "RELEASE=minor" >> $GITHUB_OUTPUT 
           echo "TAG=latest" >> $GITHUB_OUTPUT 
 
       - name: Set PreRelease Release
-        id: pull_request_target
-        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
+        id: prerelease_release
+        if: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.merged == false }}
         run: |
           echo "RELEASE=prerelease --preid=rc" >> $GITHUB_OUTPUT 
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
