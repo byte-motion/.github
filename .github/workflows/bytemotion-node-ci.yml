@@ -59,7 +59,8 @@ jobs:
         run: |
           echo ${{ github.event_name }}
           echo ${{ github.event.action }}
-          echo "${{ toJSON(github.event.pull_request) }}"
+          echo "${{ github.event.pull_request.merged }}"
+          echo "${{ github.event.pull_request.merged }}"
 
       - name: Set Major Release
         id: major_release
