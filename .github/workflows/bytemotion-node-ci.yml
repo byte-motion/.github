@@ -44,6 +44,7 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
+    concurrency: npm_publish
     steps:
       - uses: actions/checkout@v3
         with:
