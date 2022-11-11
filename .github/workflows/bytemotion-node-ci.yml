@@ -60,7 +60,6 @@ jobs:
           echo ${{ github.event_name }}
           echo ${{ github.event.action }}
           echo "${{ github.event.pull_request.merged }}"
-          echo "${{ github.event.pull_request.merged }}"
 
       - name: Set Major Release
         id: major_release
@@ -88,12 +87,12 @@ jobs:
         id: tag_and_publish
         run: | 
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          RELEASE=${{ 
+          RELEASE="${{ 
             steps.major_release.outputs.RELEASE ||
             steps.minor_release.outputs.RELEASE ||
             steps.prerelease_release.outputs.RELEASE ||
             'patch'
-          }}
+          }}"
           if [ $RELEASE = "patch" -a $BRANCH != "master" ]; 
           then 
             exit 0
