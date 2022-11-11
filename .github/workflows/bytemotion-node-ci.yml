@@ -59,7 +59,7 @@ jobs:
         run: |
           echo ${{ github.event_name }}
           echo ${{ github.event.action }}
-          echo "$GITHUB_CONTEXT"
+          echo '${{ toJSON(github) }}'
 
       - name: Set Major Release
         id: major_release
