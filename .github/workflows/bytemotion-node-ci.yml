@@ -93,6 +93,12 @@ jobs:
             steps.prerelease_release.outputs.RELEASE ||
             'patch'
           }}
+          SECONDS_SINCE_MODIFIED=$(($(date +"%s")-$(git log -1 --pretty="format:%at" package.json)))
+          if [ $SECONDS_SINCE_MODIFIED -lt 180 ];
+          then
+            echo "Not publishing since publisned too recently (3min)"
+            exit 0
+          fi
           if [ $RELEASE = "patch" -a $BRANCH != "master" ]; 
           then 
             exit 0
