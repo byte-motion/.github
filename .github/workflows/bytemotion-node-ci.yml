@@ -80,12 +80,12 @@ jobs:
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
         run: |
           echo "RELEASE=prerelease" >> $GITHUB_OUTPUT
-          echo "TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          echo "TAG=${{ github.head_ref }}" >> $GITHUB_OUTPUT
 
       - name: Tag and Publish
         id: tag_and_publish
         run: | 
-          BRANCH=${{ github.ref_name }}
+          BRANCH=${{ github.head_ref || github.ref }}
           RELEASE=${{ 
             steps.major_release.outputs.RELEASE ||
             steps.minor_release.outputs.RELEASE ||
