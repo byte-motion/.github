@@ -79,9 +79,8 @@ jobs:
         id: prerelease_release
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == false }}
         run: |
-          echo "RELEASE=prerelease" >> $GITHUB_OUTPUT 
-          BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          echo "TAG=${BRANCH}" >> $GITHUB_OUTPUT 
+          echo "RELEASE=prerelease" >> $GITHUB_OUTPUT
+          echo "TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
 
       - name: Tag and Publish
         id: tag_and_publish
