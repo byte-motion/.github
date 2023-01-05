@@ -85,7 +85,7 @@ jobs:
       - name: Tag and Publish
         id: tag_and_publish
         run: | 
-          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          BRANCH=${{ github.ref_name }}
           RELEASE=${{ 
             steps.major_release.outputs.RELEASE ||
             steps.minor_release.outputs.RELEASE ||
