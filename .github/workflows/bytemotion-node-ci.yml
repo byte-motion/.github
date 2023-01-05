@@ -125,8 +125,8 @@ jobs:
           npm version $RELEASE
           REPO=${{ github.event.repository.name }}
           echo "Pushing $RELEASE to $BRANCH at $REPO with tag $TAG..."
-          git push
-          git push --tags
+          git push origin HEAD:$BRANCH
+          git push --tags origin HEAD:$BRANCH
           npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
