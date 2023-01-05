@@ -50,6 +50,7 @@ jobs:
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 2
 
       - uses: actions/setup-node@v1
         with:
