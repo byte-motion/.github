@@ -144,3 +144,20 @@ jobs:
           -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
           ${API_URL} \
           -d "${JSON_PAYLOAD}"
+
+      - name: Check if docs were updated
+        id: check_docs
+        run: |
+          echo "DOCS_UPDATED=$(git diff-tree --no-commit-id --name-only -r HEAD^1 | egrep -c '\.md$')" >> $GITHUB_OUTPUT        
+        
+      - name: Publish updated docs
+        if: ${{ steps.tag_and_publish.outputs.TAG == 'latest' && steps.check_docs.outputs.DOCS_UPDATED != 0 }}
+        run: |
+          JSON_PAYLOAD="{ \"event_type\": \"build\" }"
+          API_URL="https://api.github.com/repos/byte-motion/ocellus_docs/dispatches"
+          curl \
+          --trace-ascii - \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          ${API_URL} \
+          -d "${JSON_PAYLOAD}"
