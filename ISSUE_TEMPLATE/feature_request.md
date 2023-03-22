@@ -9,5 +9,9 @@ A clear and concise description of what you want to happen. Add any considered d
 ### Describe alternatives you've considered
 A clear and concise description of any alternative solutions or features you've considered.
 
-### Does this feature provide immediate value to the end customer
-Is this feature absolutely necessary? Will it benifit end users? Is this some sort of snake-oil mascarading as being the latest tech trend? Will we be coding outselves into a corner? Is this a waste of time? Are we locking ourselves into a provider, framework, service, product, subscription of which we will spend equal if not more time getting ourselves out of?
+### Does this feature provide value to a specifig end customer
+Reference to customer use case and possibly generic use case as a result
+
+### Is this feature generic enough to provide value to all customers and/or ourselves
+Description of how the feature will benifit all customer use case(s) and/or how the feature could, e.g:
+save time, make us more scalability, make code-base more maintainable, decrease/remove complexity

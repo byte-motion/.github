@@ -3,6 +3,11 @@
 ### Description
 A clear and concise description of what the bug is.
 
+### Impact Level
+<!-- 1- Stopping Bug - need immediate action (daily) --->
+<!-- 2- Important - to be handled ASAP (week or two) --->
+<!-- 3- Minor - Can be handled (release or later) --->
+
 ### Steps to reproduce
 
 1. How to setup a proper environment to reproduce the bug, preferably, the explicit commands to setup said environment
@@ -27,3 +32,5 @@ For example, screenshots or analysis so far.
 OS:
 Browser:
 Stack used and version:
+Hardware:
+Versions/Tags (Docker, git, npm, etc):
