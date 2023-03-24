@@ -1,4 +1,14 @@
-## Feature Request
+---
+name: Feature Request
+about: Submit a feature request
+title: '[FEATURE] <title>'
+labels: enhancement
+assignees: ''
+
+---
+<!--
+Note: Please search to see if an issue already exists for the feature you are requesting
+-->
 
 ### Is your feature request related to a problem? Please describe.
 A clear and concise description of what the problem is. Ex. I have an issue when [...]
