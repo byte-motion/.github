@@ -1,5 +1,5 @@
 ---
-name: Feature Request
+name: 🛠 Feature Request
 about: Submit a feature request
 title: '[FEATURE] <title>'
 labels: enhancement
