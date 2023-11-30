@@ -1,0 +1,32 @@
+name: Build, publish docker image using docker.sh
+
+on:
+  workflow_call:
+    inputs:
+      publish:
+        description: 'True if publish image after build'
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      API_TOKEN_GITHUB:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+
+      - name: Build image
+        run: ./submodules/dev_ops/scripts/docker.sh build --no-cache
+
+      - name: Publish docker image
+        run: ./submodules/dev_ops/scripts/docker.sh push ${{ secrets.DOCKERHUB_TOKEN }}
+        if: ${{ inputs.publish }}
