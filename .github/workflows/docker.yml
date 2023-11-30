@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       publish:
-        descrption: 'True if publish image after build'
+        description: 'True if publish image after build'
         required: true
         type: boolean
         default: false
